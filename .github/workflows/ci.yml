@@ -1,0 +1,88 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# uv.lock pins CPU-only PyTorch wheels via the explicit `pytorch-cpu` index declared in
+# pyproject.toml. Nothing in CI trains, so a CUDA runtime would be ~2 GB of dead weight.
+
+jobs:
+  quality:
+    name: lint, types, tests (py${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+
+      - name: Set up Python ${{ matrix.python-version }}
+        run: uv python install ${{ matrix.python-version }}
+
+      - name: Install project
+        run: uv sync --all-extras --python ${{ matrix.python-version }}
+
+      - name: Lint
+        run: uv run ruff check .
+
+      - name: Format check
+        run: uv run ruff format --check .
+
+      - name: Type check
+        # numpy's stubs need mypy's 3.12 parser; runtime support still starts at 3.11.
+        if: matrix.python-version == '3.12'
+        run: uv run mypy
+
+      - name: Tests
+        run: uv run pytest --cov --cov-report=term-missing
+
+      - name: Published numbers are reproducible from committed evidence
+        run: uv run python scripts/aggregate_results.py --check
+
+      - name: Figures regenerate without error
+        run: uv run python scripts/make_figures.py --out "${RUNNER_TEMP}/figures"
+
+  leak-guard:
+    name: no patient data
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+
+      - name: Install project
+        run: uv sync --all-extras
+
+      - name: Repository contains no imagery, notebooks or oversized files
+        run: uv run pytest tests/test_no_patient_data.py -v
+
+      - name: History contains no imagery either
+        run: |
+          set -euo pipefail
+          offenders=$(git log --all --diff-filter=A --name-only --format= \
+            | sort -u \
+            | grep -Ei '\.(jpe?g|bmp|tiff?|webp|dcm|dicom|nii|npy|npz|avi|mp4|mov|mkv|pt|pth|ckpt|safetensors|ipynb)$' \
+            || true)
+          if [ -n "${offenders}" ]; then
+            echo "::error::files that must never be committed appear in history:"
+            echo "${offenders}"
+            exit 1
+          fi
+          echo "history is clean"

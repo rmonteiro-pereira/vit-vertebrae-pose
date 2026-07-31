@@ -1,0 +1,35 @@
+cff-version: 1.2.0
+title: >-
+  An empirical benchmark of Vision Transformers for cervical-vertebra
+  landmark localisation
+message: >-
+  If you use this software or its results, please cite it as below. Note that the
+  dataset is not distributed with this software and carries its own licence and
+  citation requirements; see docs/dataset.md.
+type: software
+authors:
+  - family-names: Monteiro Pereira
+    given-names: Rodrigo
+repository-code: "https://github.com/rmonteiro-pereira/vit-vertebrae-pose"
+license: MIT
+version: 1.0.0
+date-released: "2026-07-31"
+keywords:
+  - vision transformer
+  - keypoint detection
+  - medical imaging
+  - pose estimation
+  - benchmark
+  - cervical spine
+abstract: >-
+  A controlled comparison of seven Vision Transformer configurations for localising
+  two cervical-spine landmarks in lateral videofluoroscopy frames. 169 archived
+  training runs are aggregated into a 48-cell model-by-configuration grid with 95%
+  confidence intervals and per-cell run traceability. The strongest effect is that
+  freezing the pretrained backbone degrades accuracy in all 23 comparable cells,
+  by +36% to +558%. Model scale does not help: a 30.9M-parameter backbone matches or
+  beats a 429.9M one. Augmentation changes sign by architecture. The study also
+  reports its own noise floor, measured at 1.20 px between identically-weighted
+  configurations, which exceeds the 1.12 px gap between the best cell and the
+  baseline and therefore renders the ranking among fine-tuned configurations
+  unresolvable at one seed per cell.

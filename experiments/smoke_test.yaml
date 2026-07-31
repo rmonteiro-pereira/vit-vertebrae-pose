@@ -1,0 +1,14 @@
+# Two epochs on a small model: use this to confirm a machine and dataset are wired
+# up correctly before committing to a 100-epoch run.
+model_name: vitpose-s
+loss_type: l1
+num_keypoints: 2
+num_epochs: 2
+batch_size: 4
+learning_rate: 0.0002
+k_folds: 1
+scheduler_type: none
+freeze_backbone: false
+seed: 42
+augmentation_params:
+  enable_augmentation: false

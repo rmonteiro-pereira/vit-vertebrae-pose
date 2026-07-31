@@ -1,0 +1,14 @@
+# Reference cell for every "% better than baseline" claim in the README.
+# Published result: 6.31 px mean validation error (run 231898b6645d).
+model_name: vitpose-b
+loss_type: l1
+num_keypoints: 2
+num_epochs: 100
+batch_size: 16
+learning_rate: 0.0002
+k_folds: 5
+scheduler_type: plateau
+freeze_backbone: false
+seed: 42
+augmentation_params:
+  enable_augmentation: false

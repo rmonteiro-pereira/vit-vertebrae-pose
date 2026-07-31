@@ -1,0 +1,14 @@
+# The frozen-backbone ablation. Same as the baseline apart from freeze_backbone.
+# Published result: 9.37 px, 48% worse than the same model fine-tuned (run ce36d0674e87).
+model_name: vitpose-b
+loss_type: l1
+num_keypoints: 2
+num_epochs: 100
+batch_size: 16
+learning_rate: 0.0002
+k_folds: 5
+scheduler_type: plateau
+freeze_backbone: true
+seed: 42
+augmentation_params:
+  enable_augmentation: false

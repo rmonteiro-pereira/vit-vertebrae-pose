@@ -1,0 +1,101 @@
+# ---------------------------------------------------------------------------
+# Patient data. These rules are load-bearing, not housekeeping.
+#
+# The dataset behind this project is licensed videofluoroscopy of real patients.
+# Frames carry burned-in acquisition metadata (study date, time, kV). Nothing that
+# could be, or could be derived from, such a frame may enter this repository.
+#
+# tests/test_no_patient_data.py enforces the same invariant in CI, so a rule deleted
+# here still fails the build. Do not relax either without reading SECURITY.md.
+# ---------------------------------------------------------------------------
+# Anchored to the repository root with a leading slash: an unanchored `data/` would
+# also swallow the source package `src/vitvert/data/`.
+/data/
+/Dados/
+/dataset/
+/datasets/
+/frames/
+/raw/
+# Unanchored on purpose: a split directory can appear at any depth under a data root.
+**/images/
+**/labels/
+
+# Every raster format that could hold a radiograph. PNG is deliberately absent:
+# figures/ holds committed charts, and the CI guard verifies they are charts.
+*.jpg
+*.jpeg
+*.bmp
+*.tif
+*.tiff
+*.webp
+*.dcm
+*.dicom
+*.nii
+*.nii.gz
+*.npy
+*.npz
+
+# Source studies
+*.avi
+*.mp4
+*.mov
+*.mkv
+*.wmv
+
+# Notebooks: their outputs are an unreviewable base64 channel for images.
+# See docs/adr/0001-scripts-not-notebooks.md.
+*.ipynb
+.ipynb_checkpoints/
+
+# ---------------------------------------------------------------------------
+# Model weights and training output
+# ---------------------------------------------------------------------------
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.onnx
+pretrained_weights/
+runs/
+checkpoints/
+mlruns/
+wandb/
+
+# ---------------------------------------------------------------------------
+# Python
+# ---------------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+.python-version
+
+# ---------------------------------------------------------------------------
+# Tooling
+# ---------------------------------------------------------------------------
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# ---------------------------------------------------------------------------
+# Secrets and local environment
+# ---------------------------------------------------------------------------
+.env
+.env.*
+*.pem
+*.key
+secrets.*
+
+# ---------------------------------------------------------------------------
+# OS and editor
+# ---------------------------------------------------------------------------
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

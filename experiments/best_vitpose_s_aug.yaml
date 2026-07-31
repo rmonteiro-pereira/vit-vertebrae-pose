@@ -1,0 +1,18 @@
+# Best fine-tuned cell in the benchmark.
+# Published result: 5.18 +/- 0.40 px, 17.8% better than baseline (run bd486fc68aa1).
+model_name: vitpose-s
+loss_type: l1
+num_keypoints: 2
+num_epochs: 100
+batch_size: 16
+learning_rate: 0.0002
+k_folds: 5
+scheduler_type: plateau
+freeze_backbone: false
+seed: 42
+augmentation_params:
+  enable_augmentation: true
+  crop_jitter_enabled: true
+  color_jitter_enabled: true
+  horizontal_flip_enabled: true
+  vertical_flip_enabled: true

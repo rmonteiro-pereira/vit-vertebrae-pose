@@ -1,0 +1,13 @@
+# Normalise to LF in the repository regardless of the contributor's platform.
+# This project was developed on Windows; without this, a CRLF checkout of a shell
+# script in .github/workflows would fail on the Linux runner.
+* text=auto eol=lf
+
+# Binary: never touch, never diff as text.
+*.png binary
+
+# The run archive is the evidence base. Marking it as generated keeps 169 lines of
+# metrics out of diff summaries and pull-request reviews, where they are noise --
+# review scripts/aggregate_results.py and tools/export_runs.py instead.
+results/runs.jsonl -diff linguist-generated
+uv.lock -diff linguist-generated

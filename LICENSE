@@ -1,0 +1,47 @@
+MIT License
+
+Copyright (c) 2026 Rodrigo Monteiro Pereira
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+================================================================================
+SCOPE OF THIS LICENCE
+================================================================================
+
+This MIT licence covers ONLY the source code, documentation, configuration and
+generated figures in this repository.
+
+It does NOT cover, and cannot grant any right to:
+
+  1. THE DATASET.
+     The imaging data used to produce these results is licensed research
+     material and is not distributed here. It is governed by the terms of its
+     own source, which at the time of writing is a Creative Commons
+     BY-NC-SA 3.0 licence plus the repository's own ground rules, including a
+     prohibition on re-posting protected data elsewhere and on incorporating it
+     into commercial products. See docs/dataset.md. Obtaining and using the data
+     is between you and its provider; nothing in this repository grants you any
+     right to it.
+
+  2. PRETRAINED MODEL WEIGHTS.
+     ViTPose and ViTPose++ checkpoints are distributed by their own authors
+     under their own terms. See docs/dataset.md for provenance.
+
+No patient imagery, no image derived from patient imagery, and no patient
+identifier is contained in this repository. See SECURITY.md.
