@@ -83,6 +83,31 @@ def _grid(rows: Sequence[AggregatedRow], attribute: str) -> np.ndarray:
     )
 
 
+def _readable_text_color(rgba: Sequence[float]) -> str:
+    """Pick black or white for a label drawn on ``rgba``.
+
+    A single value threshold does not work for a diverging map such as
+    ``RdYlGn_r``, which is dark at both ends and light in the middle: the
+    low-error cells are dark green and the high-error cells are dark red,
+    so both need light text while the yellow midrange needs dark text.
+    Deciding on the relative luminance of the colour actually rendered is
+    independent of the colormap and of the data range.
+    """
+    channels = []
+    for component in rgba[:3]:
+        channels.append(
+            component / 12.92 if component <= 0.04045 else ((component + 0.055) / 1.055) ** 2.4
+        )
+    luminance = 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2]
+    # 0.18 is not an eyeballed midpoint, it is the crossover where BOTH choices clear
+    # WCAG AA. White text on luminance L has contrast 1.05 / (L + 0.05), which reaches
+    # 4.5:1 only while L <= 0.1833; black has (L + 0.05) / 0.05, which reaches it only
+    # once L >= 0.175. Any cutoff inside [0.175, 0.1833] therefore leaves no background
+    # that fails. A higher value looks reasonable and is not: at 0.36 a mid-dark cell
+    # gets white text at 2.56:1, which fails badly at this 7.5pt label size.
+    return "black" if luminance > 0.18 else "white"
+
+
 def figure_error_grid(rows: Sequence[AggregatedRow], out: Path) -> Path:
     """Heat map of mean validation pixel error with 95% interval half-widths."""
     values = _grid(rows, "best_pixel_error")
@@ -95,8 +120,6 @@ def figure_error_grid(rows: Sequence[AggregatedRow], out: Path) -> Path:
     ax.set_title("Mean validation pixel error by model and configuration\n(± = 95% CI half-width)")
     ax.grid(False)
 
-    finite = values[np.isfinite(values)]
-    midpoint = finite.min() + 0.55 * (finite.max() - finite.min()) if finite.size else 0.0
     for i in range(values.shape[0]):
         for j in range(values.shape[1]):
             value = values[i, j]
@@ -110,7 +133,7 @@ def figure_error_grid(rows: Sequence[AggregatedRow], out: Path) -> Path:
                 ha="center",
                 va="center",
                 fontsize=7.5,
-                color="white" if value > midpoint else "black",
+                color=_readable_text_color(image.cmap(image.norm(value))),
             )
     fig.colorbar(image, ax=ax, label="pixel error")
     path = out / "error_grid.png"
