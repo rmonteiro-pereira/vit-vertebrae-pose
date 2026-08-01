@@ -93,11 +93,7 @@ def _readable_text_color(rgba: Sequence[float]) -> str:
     Deciding on the relative luminance of the colour actually rendered is
     independent of the colormap and of the data range.
     """
-    channels = []
-    for component in rgba[:3]:
-        channels.append(
-            component / 12.92 if component <= 0.04045 else ((component + 0.055) / 1.055) ** 2.4
-        )
+    channels = [c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4 for c in rgba[:3]]
     luminance = 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2]
     # 0.18 is not an eyeballed midpoint, it is the crossover where BOTH choices clear
     # WCAG AA. White text on luminance L has contrast 1.05 / (L + 0.05), which reaches
@@ -133,7 +129,10 @@ def figure_error_grid(rows: Sequence[AggregatedRow], out: Path) -> Path:
                 ha="center",
                 va="center",
                 fontsize=7.5,
-                color=_readable_text_color(image.cmap(image.norm(value))),
+                # tuple() is not decoration: cmap returns tuple OR ndarray depending on the
+                # input shape, and only the tuple satisfies Sequence[float]. Normalising here
+                # keeps the helper's signature honest instead of widening it to swallow both.
+                color=_readable_text_color(tuple(image.cmap(image.norm(value)))),
             )
     fig.colorbar(image, ax=ax, label="pixel error")
     path = out / "error_grid.png"
