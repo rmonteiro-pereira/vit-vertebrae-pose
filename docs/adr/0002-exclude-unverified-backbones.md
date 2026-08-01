@@ -34,9 +34,10 @@ Two separate calls.
 
 **The results are retained.** `results/runs.jsonl` keeps every `hrformer-b` and
 `transpose-b` run, they appear in `figures/error_grid.png`, and they are excluded from
-every claim in the README. [`limitations.md`](../limitations.md) §3 states why, and
+the model ranking while being marked in place wherever else they appear.
+[`limitations.md`](../limitations.md) §3 states why and lists where they do appear, and
 `tests/test_models_and_dataset.py::test_unverified_backbones_are_not_registered` pins
-the exclusion.
+the fact that no builder ships for them.
 
 ## Alternatives rejected
 

@@ -30,9 +30,11 @@ results/aggregated_metrics.json -- in this repository.
 
 Those two files under results/ are measurements of the author's own training runs:
 training hyper-parameters, and per-epoch loss and pixel-error curves. They contain
-no image, no image-derived array, no per-image value and no identifier. They record
-how the models behaved, not the content of the corpus the models were trained on.
-See docs/dataset.md and SECURITY.md.
+no image, no image-derived array, no per-image value, and no identifier of a
+patient, study or frame. (Each record does carry a short run hash, which identifies
+a training run and nothing else.) They record how the models behaved, not the
+content of the corpus the models were trained on. See docs/dataset.md and
+SECURITY.md.
 
 It does NOT cover, and cannot grant any right to:
 

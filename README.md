@@ -9,9 +9,11 @@ landmarks in lateral videofluoroscopy frames. **169 archived training runs, 20,0
 epochs, collapsed into a nine-model x six-configuration grid with 48 of its 54 cells
 filled**, with 95% confidence intervals on every reported error and a single
 traceable run hash behind every number. Seven of the nine labels are the Vision
-Transformer backbones this repository ships, and every claim below rests on those
-seven; the remaining two are reported for completeness and excluded from all of them
-(§5, and [`docs/limitations.md`](docs/limitations.md) §3).
+Transformer backbones this repository ships. The other two — `hrformer-b` and
+`transpose-b` — are builders whose parameter counts do not match the architectures
+they name; they are kept out of the model ranking (§2) and marked wherever else they
+appear, including the largest frozen-backbone penalty in §1
+(see [`docs/limitations.md`](docs/limitations.md) §3).
 
 **The dataset is licensed medical imaging and is not in this repository.** It is
 third-party research data under **Creative Commons BY-NC-SA 3.0**, together with its
@@ -52,6 +54,12 @@ Across all 23 cells where the same model and data policy were run both ways, fre
 was worse **every time**: **+35.7% at best, +104% at the median, +558% at worst**.
 No other variable in the study comes close.
 
+This is the one claim that spans all nine labels rather than the seven shipped
+backbones, because it is a statement about freezing and it holds universally. The
+worst cell, +558%, is `transpose-b / Expand` — an unverified builder (§5). Restricted
+to the seven shipped backbones it is 17 of 17 cells at **+35.7% / +104.1% / +279.5%**,
+so the finding does not rest on the two extras.
+
 ![Fine-tuned versus frozen backbone](figures/frozen_penalty.png)
 
 > `results/aggregated_metrics.json`, cells `Fine-tuned / *` vs `Frozen / *`.
@@ -75,14 +83,19 @@ that small is better.
 
 ![Best fine-tuned configurations](figures/top_models.png)
 
-> `results/aggregated_metrics.json → top_fine_tuned`. Parameter counts from the
+> `results/aggregated_metrics.json → top_fine_tuned`, restricted to the seven shipped
+> backbones: the stored array also holds `transpose-b / Expand` at 5.31 px in third
+> place, which is dropped here for the reason in §5. Parameter counts from the
 > original repository's model audit, quoted in `docs/results.md`.
 
 ### 3. Augmentation helps or hurts depending on the architecture — the sign flips
 
-| | `vitpose-l` | `vitpose++-s` | `vitpose-s` | `vitpose++-b` | `vitpose-b` | `vit-base` | `hrformer-b` |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| Δ error with augmentation | **−20.0%** | −15.1% | −9.8% | +2.3% | +8.7% | +14.5% | +56.5% |
+| | `vitpose-l` | `vitpose++-s` | `vitpose-s` | `vitpose++-l` | `vitpose++-b` | `vitpose-b` | `vit-base` | `hrformer-b`* |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Δ error with augmentation | **−20.0%** | −15.1% | −9.8% | −8.6% | +2.3% | +8.7% | +14.5% | +56.5% |
+
+\* `hrformer-b` is one of the two unverified builders (§5). `transpose-b`, the other,
+sits at +0.6%; the full nine-row table is in [`docs/results.md`](docs/results.md).
 
 ![Augmentation effect by architecture](figures/augmentation_effect.png)
 

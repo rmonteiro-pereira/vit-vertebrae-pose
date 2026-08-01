@@ -56,9 +56,16 @@ prediction head alone. Whatever those runs trained, it was not HRFormer-B or
 TransPose-B.
 
 Their rows are retained in `results/runs.jsonl` and in the grid figure because deleting
-measured data is worse than labelling it. They are **excluded from every claim** in the
-README, and the public package ships no builder for them
-([ADR 0002](adr/0002-exclude-unverified-backbones.md)).
+measured data is worse than labelling it, and the public package ships no builder for
+them ([ADR 0002](adr/0002-exclude-unverified-backbones.md)).
+
+They are **excluded from the model ranking** — README §2 and the top-five table in
+[`results.md`](results.md) are restricted to the seven shipped backbones — and
+**marked in place wherever else they appear**: the frozen-backbone claim (README §1)
+spans all nine labels and its worst cell, +558%, is `transpose-b / Expand`; the
+augmentation table (README §3) carries `hrformer-b`; the full grid (README §5) shows
+both. No claim in this repository depends on treating either label as the
+architecture it names.
 
 Note that `transpose-b / Fine-tuned / Expand` ranks third in the top-five table of the
 original article at 5.31 px. That ranking should not be relied on.
