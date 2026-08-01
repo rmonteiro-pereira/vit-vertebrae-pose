@@ -30,8 +30,16 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
+import sys
 from pathlib import Path
 from typing import Any
+
+#: The private tree identifies every run by a short content hash.  Enforcing the shape
+#: here, at the boundary, is what makes the export closed rather than open: refusing a
+#: *missing* hash is not enough, because any truthy value would still be published --
+#: including a directory name that happens to be set on the record.
+MODEL_HASH_PATTERN = re.compile(r"[0-9a-f]{12}")
 
 # Keys copied verbatim from the private ``summary.json`` config block.  Anything not on
 # this list is dropped, which is what keeps machine-local paths out of the export.
@@ -101,7 +109,7 @@ def export_run(model_dir: Path) -> dict[str, Any] | None:
         return None
 
     model_hash = summary.get("model_hash")
-    if not model_hash:
+    if not isinstance(model_hash, str) or not MODEL_HASH_PATTERN.fullmatch(model_hash):
         return None
 
     config = {k: v for k, v in (summary.get("config") or {}).items() if k in CONFIG_ALLOWLIST}
@@ -130,9 +138,12 @@ def main() -> int:
         parser.error(f"{args.models_dir} is not a directory")
 
     records = []
+    skipped = []
     for model_dir in sorted(p for p in args.models_dir.iterdir() if p.is_dir()):
         record = export_run(model_dir)
-        if record is not None:
+        if record is None:
+            skipped.append(model_dir.name)
+        else:
             records.append(record)
 
     args.out.parent.mkdir(parents=True, exist_ok=True)
@@ -141,7 +152,12 @@ def main() -> int:
             handle.write(json.dumps(record, sort_keys=True) + "\n")
 
     print(f"wrote {len(records)} runs to {args.out}")
-    return 0
+    if skipped:
+        # Say it out loud.  A refusal is the intended behaviour for an unusable run, but
+        # silence would also be the symptom of the private tree changing its hash format
+        # and every run being refused -- which would empty the archive without a word.
+        print(f"skipped {len(skipped)} unusable run directories: {', '.join(skipped)}", file=sys.stderr)
+    return 0 if records else 1
 
 
 if __name__ == "__main__":
