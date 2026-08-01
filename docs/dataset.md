@@ -41,21 +41,27 @@ two clauses that decide what this repository may contain, quoted verbatim:
 > including systems such as large language models (LLMs) such as ChatGPT."
 
 So: **use** is permitted for non-commercial research with attribution and share-alike.
-**Re-posting** is not. That settles the question for this repository regardless of any
-other consideration — no frame, and nothing derived from a frame, is committed here.
+**Re-posting** is not. So the corpus is not here: no frame of it is committed as data,
+and neither the annotations nor the splits are published.
 
 Two further constraints apply on top of the licence and would apply even if the
 licence were permissive:
 
 1. **The frames carry burned-in acquisition metadata.** Study date, acquisition time
    and technical parameters are rendered into the image corners by the fluoroscopy
-   unit. A study date attached to an identifiable anatomy is an indirect identifier.
+   unit, alongside a device and site banner. A study date attached to an identifiable
+   anatomy is an indirect identifier.
 2. **A licence to use is not a licence to republish patient imaging.** Publishing
-   clinical images in a portfolio is a separate judgement from the copyright question,
-   and this repository resolves it the conservative way.
+   clinical images in a portfolio is a separate judgement from the copyright question.
 
-Every figure committed here is a chart over aggregate metrics. See
-[`../SECURITY.md`](../SECURITY.md) for how that is enforced.
+Both constraints were engaged once, deliberately, for the talk under
+[`presentation/`](presentation/): eight of its figures are built on frames. The first
+constraint was answered by removing every burned-in identifier before committing; the
+second was answered by the author, who holds the relationship with the data provider
+and instructed that the deck be published. Nothing else changed — every figure under
+[`../figures/`](../figures/) is still a chart over aggregate metrics, and the data path
+still carries no imagery at all. [`../SECURITY.md`](../SECURITY.md) records what was
+removed and what was not.
 
 ## Obtaining the data
 
@@ -80,10 +86,12 @@ fetch anything.
 > this repository cannot verify, because a wrong attribution would be worse than one
 > marked incomplete.
 >
-> What this release publishes is metrics only — no frame, no annotation, and nothing
-> derived from a frame — so it redistributes neither the corpus nor the annotated
-> derivative. Whether the annotated derivative could be shared is a separate question,
-> and this repository does not answer it: it does not share it.
+> What this release publishes is metrics, plus the eight redacted frames illustrating
+> the talk under [`presentation/`](presentation/). It does not publish the corpus or
+> the annotated derivative: no annotation, no split, and no quantity of frames from
+> which either could be reconstructed. Whether the annotated derivative could be
+> shared is a separate question, and this repository does not answer it: it does not
+> share it.
 
 ## Expected layout
 

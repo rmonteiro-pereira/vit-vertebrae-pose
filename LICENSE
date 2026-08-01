@@ -52,5 +52,9 @@ It does NOT cover, and cannot grant any right to:
      ViTPose and ViTPose++ checkpoints are distributed by their own authors
      under their own terms. See docs/dataset.md for provenance.
 
-No patient imagery, no image derived from patient imagery, and no patient
-identifier is contained in this repository. See SECURITY.md.
+No patient identifier is contained in this repository. Patient imagery appears
+in one place only -- the presentation under docs/presentation/, whose figures
+were redacted of every burned-in identifier and are published at the author's
+instruction. That deck is the author's own work and the MIT grant above covers
+it; the grant does not extend to the underlying imaging data, which remains
+governed by clause 1 above. See SECURITY.md.

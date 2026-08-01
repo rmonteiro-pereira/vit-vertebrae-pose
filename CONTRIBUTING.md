@@ -31,6 +31,12 @@ CI runs exactly this on Python 3.11 and 3.12. If it passes locally it passes the
 No image, no video, no array derived from one, no filename that identifies a study or a
 frame. Not in a test fixture, not in a docstring, not in a figure.
 
+This rule has exactly one exception and it is not yours to extend: the presentation in
+`docs/presentation/`, whose figures were redacted and published on the data owner's
+instruction (see [`SECURITY.md`](SECURITY.md)). A contribution that adds imagery will
+be refused; if you believe yours is a second exception, open an issue and do not commit
+it in the meantime.
+
 `tests/test_no_patient_data.py` enforces this and a second CI job scans the full git
 history. Read [`SECURITY.md`](SECURITY.md) before touching `tools/export_runs.py`,
 `.gitignore` or anything under `figures/`.

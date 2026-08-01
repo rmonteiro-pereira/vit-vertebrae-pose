@@ -17,11 +17,18 @@ appear, including the largest frozen-backbone penalty in §1
 
 **The dataset is licensed medical imaging and is not in this repository.** It is
 third-party research data under **Creative Commons BY-NC-SA 3.0**, together with its
-host's ground rules, which forbid re-posting it. No frame, and nothing derived from a
-frame, is committed here. Everything else is: the code, the run archive, the
-aggregation rules, the figures, and a CI job that fails the build if a radiograph
-ever gets near the tree. [`docs/dataset.md`](docs/dataset.md) covers what the licence
-permits and how to obtain the data yourself.
+host's ground rules, which forbid re-posting it. The dataset itself — its frames, its
+annotations, its splits — is not here, and nothing in this repository reconstructs it.
+Everything else is: the code, the run archive, the aggregation rules, the figures, and
+a CI job that fails the build if a radiograph reaches the tree through the data path.
+[`docs/dataset.md`](docs/dataset.md) covers what the licence permits and how to obtain
+the data yourself.
+
+The one place frames do appear is the talk in
+[`docs/presentation/`](docs/presentation/), whose qualitative figures show eight of
+them. Every burned-in identifier was removed before committing and the anatomy left
+untouched; [`SECURITY.md`](SECURITY.md) states exactly what was taken out, what was
+not, and on whose authority.
 
 **Attribution is incomplete, and marked rather than guessed.** CC BY-NC-SA requires
 naming the source. What the archived material supports is that the underlying
