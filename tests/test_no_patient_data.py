@@ -9,9 +9,12 @@ This runs on every push and every pull request.
 
 from __future__ import annotations
 
+import importlib.util
 import json
 import re
 from pathlib import Path
+from types import ModuleType
+from typing import Any
 
 import pytest
 
@@ -185,6 +188,77 @@ class TestRunArchive:
                     assert len(series) <= budget, (
                         f"line {lineno}: {name} has {len(series)} entries, budget is {budget}"
                     )
+
+
+class TestExporterRefusesUnhashedRuns:
+    """The exporter must never substitute a private directory name for a missing hash.
+
+    ``tools/export_runs.py`` is the only bridge out of the private research repo, and
+    its own docstring promises that "directory names of the private machine" are not
+    exported.  A ``summary.get("model_hash") or model_dir.name`` fallback broke that
+    promise: a run whose summary lost its hash would have published the folder it was
+    trained in — plausibly a study or machine name.
+
+    ``TestRunArchive`` cannot catch this. Its allowlist checks which *keys* appear, and
+    ``model_hash`` is an allowed key; only the value would have changed. So the guard
+    has to sit on the exporter and on the shape of the value.
+    """
+
+    HASH_SHAPE = re.compile(r"[0-9a-f]{12}")
+
+    @staticmethod
+    def _load_exporter() -> ModuleType:
+        """Import ``tools/export_runs.py`` by path — ``tools`` is not a package."""
+        spec = importlib.util.spec_from_file_location("export_runs", REPO_ROOT / "tools" / "export_runs.py")
+        assert spec is not None and spec.loader is not None
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        return module
+
+    @staticmethod
+    def _write_run(model_dir: Path, summary: dict[str, Any]) -> None:
+        results_dir = model_dir / "run_1" / "results"
+        results_dir.mkdir(parents=True)
+        (model_dir / "summary.json").write_text(json.dumps(summary), encoding="utf-8")
+        (results_dir / "experiment_results.json").write_text(
+            json.dumps(
+                {
+                    "results": {"fold_1": {"valid_losses": [1.0], "num_valid_samples": 1}},
+                    "summary": {"pixel_error": {"mean": 1.0}},
+                }
+            ),
+            encoding="utf-8",
+        )
+
+    def test_a_run_without_a_hash_is_refused(self, tmp_path: Path) -> None:
+        """No hash means the run is unusable — not an invitation to name the folder."""
+        exporter = self._load_exporter()
+        model_dir = tmp_path / "vitpose_s_RODRIGO-DESKTOP"
+        self._write_run(model_dir, {"config": {"model_name": "vitpose-s"}})
+
+        assert exporter.export_run(model_dir) is None
+
+    def test_a_run_with_a_hash_still_exports_that_hash(self, tmp_path: Path) -> None:
+        """The refusal must not be achieved by breaking the normal path."""
+        exporter = self._load_exporter()
+        model_dir = tmp_path / "vitpose_s_RODRIGO-DESKTOP"
+        self._write_run(model_dir, {"model_hash": "0123456789ab", "config": {}})
+
+        record = exporter.export_run(model_dir)
+        assert record is not None
+        assert record["model_hash"] == "0123456789ab"
+
+    def test_every_published_hash_has_the_hash_shape(self) -> None:
+        """A directory name could not pass this even if one were ever emitted."""
+        offenders = []
+        with (REPO_ROOT / "results" / "runs.jsonl").open(encoding="utf-8") as handle:
+            for lineno, line in enumerate(handle, start=1):
+                if not line.strip():
+                    continue
+                value = json.loads(line).get("model_hash", "")
+                if not self.HASH_SHAPE.fullmatch(value):
+                    offenders.append((lineno, value))
+        assert offenders == [], f"model_hash values that are not content hashes: {offenders}"
 
 
 class TestRepositoryHygiene:
