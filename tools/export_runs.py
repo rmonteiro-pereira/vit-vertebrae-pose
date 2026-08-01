@@ -100,13 +100,17 @@ def export_run(model_dir: Path) -> dict[str, Any] | None:
     if not history["valid_losses"]:
         return None
 
+    model_hash = summary.get("model_hash")
+    if not model_hash:
+        return None
+
     config = {k: v for k, v in (summary.get("config") or {}).items() if k in CONFIG_ALLOWLIST}
 
     pixel_raw = (results.get("summary") or {}).get("pixel_error") or {}
     pixel = {k: pixel_raw[k] for k in PIXEL_ERROR_KEYS if k in pixel_raw}
 
     return {
-        "model_hash": summary.get("model_hash") or model_dir.name,
+        "model_hash": model_hash,
         "config": config,
         "history": history,
         "pixel_error": pixel or None,
