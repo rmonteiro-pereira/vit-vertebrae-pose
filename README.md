@@ -4,15 +4,30 @@
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/license-MIT%20(code%20only)-green.svg)](LICENSE)
 
-A controlled benchmark of seven Vision Transformer configurations for localising two
-cervical-spine landmarks in lateral videofluoroscopy frames. **169 archived training
-runs, 20,098 epochs, collapsed into a 48-cell model x configuration grid**, with
-95% confidence intervals on every reported error and a single traceable run hash
-behind every number.
+A controlled benchmark of Vision Transformers for localising two cervical-spine
+landmarks in lateral videofluoroscopy frames. **169 archived training runs, 20,098
+epochs, collapsed into a nine-model x six-configuration grid with 48 of its 54 cells
+filled**, with 95% confidence intervals on every reported error and a single
+traceable run hash behind every number. Seven of the nine labels are the Vision
+Transformer backbones this repository ships, and every claim below rests on those
+seven; the remaining two are reported for completeness and excluded from all of them
+(§5, and [`docs/limitations.md`](docs/limitations.md) §3).
 
-**The dataset is licensed medical imaging and is not in this repository.** Everything
-else is: the code, the run archive, the aggregation rules, the figures, and a CI job
-that fails the build if a radiograph ever gets near the tree.
+**The dataset is licensed medical imaging and is not in this repository.** It is
+third-party research data under **Creative Commons BY-NC-SA 3.0**, together with its
+host's ground rules, which forbid re-posting it. No frame, and nothing derived from a
+frame, is committed here. Everything else is: the code, the run archive, the
+aggregation rules, the figures, and a CI job that fails the build if a radiograph
+ever gets near the tree. [`docs/dataset.md`](docs/dataset.md) covers what the licence
+permits and how to obtain the data yourself.
+
+**Attribution is incomplete, and marked rather than guessed.** CC BY-NC-SA requires
+naming the source. What the archived material supports is that the underlying
+videofluoroscopy studies come from a public research repository of swallow studies
+hosted within the TalkBank family of corpora. **The exact corpus, its authors and its
+required citation are not established by anything in this repository, so they are not
+stated here** — a wrong attribution would be worse than one marked incomplete.
+Completing it is an open item in [`docs/dataset.md`](docs/dataset.md).
 
 ```bash
 git clone https://github.com/rmonteiro-pereira/vit-vertebrae-pose

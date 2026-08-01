@@ -7,7 +7,7 @@ will download them for you.  Everything else in the repository runs without them
 Example::
 
     uv run --extra train python scripts/train.py \
-        --config experiments/vitpose_s_aug.yaml \
+        --config experiments/best_vitpose_s_aug.yaml \
         --data-root /path/to/dataset/fold1 \
         --output runs/vitpose-s-aug
 

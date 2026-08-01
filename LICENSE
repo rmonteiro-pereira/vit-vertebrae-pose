@@ -24,8 +24,15 @@ SOFTWARE.
 SCOPE OF THIS LICENCE
 ================================================================================
 
-This MIT licence covers ONLY the source code, documentation, configuration and
-generated figures in this repository.
+This MIT licence covers ONLY the source code, documentation, configuration,
+generated figures, and the run archive -- results/runs.jsonl and
+results/aggregated_metrics.json -- in this repository.
+
+Those two files under results/ are measurements of the author's own training runs:
+training hyper-parameters, and per-epoch loss and pixel-error curves. They contain
+no image, no image-derived array, no per-image value and no identifier. They record
+how the models behaved, not the content of the corpus the models were trained on.
+See docs/dataset.md and SECURITY.md.
 
 It does NOT cover, and cannot grant any right to:
 

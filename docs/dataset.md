@@ -73,12 +73,17 @@ fetch anything.
    host's to distribute and is not published. Reproducing the annotation from the
    source video requires re-executing the protocol summarised above.
 
-> **Open item for the repository owner.** The exact corpus name, its citation, and
-> whether the annotated derivative may be shared at all should be confirmed with the
-> research group and the corpus maintainers before this repository is made public, and
-> this section updated with the precise citation. The description above is what the
-> archived material supports; it deliberately stops short of naming a corpus this
-> repository cannot verify.
+> **Open item — the attribution here is incomplete.** The exact corpus name and the
+> citation it requires are still to be confirmed with the research group and the corpus
+> maintainers, and this section updated with the precise citation. The description above
+> is what the archived material supports; it deliberately stops short of naming a corpus
+> this repository cannot verify, because a wrong attribution would be worse than one
+> marked incomplete.
+>
+> What this release publishes is metrics only — no frame, no annotation, and nothing
+> derived from a frame — so it redistributes neither the corpus nor the annotated
+> derivative. Whether the annotated derivative could be shared is a separate question,
+> and this repository does not answer it: it does not share it.
 
 ## Expected layout
 

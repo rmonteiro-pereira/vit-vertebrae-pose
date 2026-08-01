@@ -22,9 +22,10 @@ keywords:
   - benchmark
   - cervical spine
 abstract: >-
-  A controlled comparison of seven Vision Transformer configurations for localising
-  two cervical-spine landmarks in lateral videofluoroscopy frames. 169 archived
-  training runs are aggregated into a 48-cell model-by-configuration grid with 95%
+  A controlled comparison of seven Vision Transformer backbones across six training
+  configurations, for localising two cervical-spine landmarks in lateral
+  videofluoroscopy frames. 169 archived training runs are aggregated into a
+  nine-model by six-configuration grid, 48 of its 54 cells filled, with 95%
   confidence intervals and per-cell run traceability. The strongest effect is that
   freezing the pretrained backbone degrades accuracy in all 23 comparable cells,
   by +36% to +558%. Model scale does not help: a 30.9M-parameter backbone matches or
