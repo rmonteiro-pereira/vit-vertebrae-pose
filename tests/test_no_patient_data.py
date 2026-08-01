@@ -238,6 +238,31 @@ class TestExporterRefusesUnhashedRuns:
 
         assert exporter.export_run(model_dir) is None
 
+    @pytest.mark.parametrize(
+        "bad_hash",
+        [
+            "vitpose_s_RODRIGO-DESKTOP",  # the directory name the old fallback published
+            "C:\\research\\models\\run_7",  # an absolute path on the private machine
+            "ABC123DEF456",  # right length, wrong case
+            "0123456789abc",  # one character too long
+            "0123456789a",  # one character too short
+            "0123456789ag",  # right length, not hexadecimal
+            12345678901,  # not a string at all
+            ["0123456789ab"],  # not a string at all
+        ],
+    )
+    def test_a_malformed_hash_is_refused(self, tmp_path: Path, bad_hash: object) -> None:
+        """Refusing only a *missing* hash is not enough — any truthy value would publish.
+
+        This is the same failure class as the original fallback: ``model_hash`` is an
+        allowed key, so only its value would have carried the leak.
+        """
+        exporter = self._load_exporter()
+        model_dir = tmp_path / "run"
+        self._write_run(model_dir, {"model_hash": bad_hash, "config": {}})
+
+        assert exporter.export_run(model_dir) is None
+
     def test_a_run_with_a_hash_still_exports_that_hash(self, tmp_path: Path) -> None:
         """The refusal must not be achieved by breaking the normal path."""
         exporter = self._load_exporter()
