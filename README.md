@@ -4,6 +4,12 @@
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/license-MIT%20(code%20only)-green.svg)](LICENSE)
 
+![Mean validation pixel error by model and configuration — nine models by six configurations, 95% confidence interval on every cell](figures/error_grid.png)
+
+*The whole benchmark in one figure: 48 of 54 cells filled, a 95% CI on every
+number, and every cell re-derivable from the run archive by
+`scripts/aggregate_results.py --check`.*
+
 A controlled benchmark of Vision Transformers for localising two cervical-spine
 landmarks in lateral videofluoroscopy frames. **169 archived training runs, 20,098
 epochs, collapsed into a nine-model x six-configuration grid with 48 of its 54 cells
@@ -36,7 +42,10 @@ videofluoroscopy studies come from a public research repository of swallow studi
 hosted within the TalkBank family of corpora. **The exact corpus, its authors and its
 required citation are not established by anything in this repository, so they are not
 stated here** — a wrong attribution would be worse than one marked incomplete.
-Completing it is an open item in [`docs/dataset.md`](docs/dataset.md).
+Completing it is an open item in [`docs/dataset.md`](docs/dataset.md), with the
+path stated there: confirm the corpus name and its required citation with the
+research group and the corpus maintainers, then update that section — nothing
+gets named before it is verified.
 
 ```bash
 git clone https://github.com/rmonteiro-pereira/vit-vertebrae-pose
@@ -45,6 +54,16 @@ uv run pytest                                  # 243 tests, no GPU, no dataset
 uv run python scripts/aggregate_results.py --check   # published numbers re-derived
 uv run python scripts/make_figures.py                # every figure regenerated
 ```
+
+## Review in 5 minutes
+
+| Minute | Where to look | What it establishes |
+|---|---|---|
+| 1 | the figure above | Nine models, six configurations, 95% CI on every cell — the whole benchmark at a glance. |
+| 2 | [What was measured](#what-was-measured) | Freezing the backbone is the most damaging single choice; the best fine-tuned cell reaches **5.18 ± 0.40 px** against the 6.31 px baseline. |
+| 3 | `uv run pytest` | **243 tests** pass with no GPU and no dataset — the analysis is verifiable without the licensed medical data. |
+| 4 | `uv run python scripts/aggregate_results.py --check` | Every published number is re-derived from the 169-run archive, or the command fails. |
+| 5 | [What this repository does *not* claim](#what-this-repository-does-not-claim) · [A defect the archive proves](#a-defect-the-archive-proves) | The limitations are explicit, and one real defect is documented from its own archive instead of hidden. |
 
 ---
 
